@@ -2,9 +2,9 @@ Structure of the Elasticsearch
 
 User
 =====
-```bash
 index: user-index, doc_type: user.
-```
+
+```bash
 {
   id: String,
   firstName: String,
@@ -12,6 +12,7 @@ index: user-index, doc_type: user.
   email: String (index),
   password: String
 }
+```
 
 
 Tour
