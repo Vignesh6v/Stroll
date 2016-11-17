@@ -14,12 +14,12 @@ index: user-index, doc_type: user.
 }
 ```
 
-
 Tour
 =====
-```bash
+
 index: tour-index, doc_type: tour.
-```
+
+```bash
 {
   id: String (index),
   name: String,
@@ -29,10 +29,11 @@ index: tour-index, doc_type: tour.
   distance: String,
   stops: String
 }
+```
+
+index: tourname-index, doc_type: tour.
 
 ```bash
-index: tourname-index, doc_type: tour.
-```
 {
   id: String,
   name: String (index),
@@ -42,10 +43,11 @@ index: tourname-index, doc_type: tour.
   distance: String,
   stops: String
 }
+```
+
+index: tourcategory-index, doc_type: tour.
 
 ```bash
-index: tourcategory-index, doc_type: tour.
-```
 {
   id: String,
   name: String,
@@ -55,12 +57,14 @@ index: tourcategory-index, doc_type: tour.
   distance: String,
   stops: String
 }
+```
 
 Stops
 =======
-```bash
+
 index: stops-index, doc_type: stops.
-```
+
+```bash
 {
   id: String,
   tourid: String (index),
@@ -73,29 +77,32 @@ index: stops-index, doc_type: stops.
   photoId: String,
   description: String
 }
-
+```
 
 Photo
 =======
-```bash
+
 index: photo-index, doc_type: photo.
-```
+
+```bash
 {
   id: String,
   photoId: String (index),
   userId: String,
   name: String
 }
-
+```
 
 History
 =======
-```bash
+
 index: history-index, doc_type: history.
-```
+
+```bash
 {
   id: String,
   userId: String (index),
   tourId: String,
   takenOn: String
 }
+```
