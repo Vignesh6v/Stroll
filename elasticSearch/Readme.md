@@ -1,4 +1,6 @@
-Structure of the Elasticsearch
+# Schema for the Elasticsearch
+
+AWS Elasticsearch
 
 User
 =====
@@ -27,21 +29,26 @@ index: tour-index, doc_type: tour.
   category: String,
   time: String,
   distance: String,
-  stops: String
+  stops: String,
+  location: {
+    latitude: String,
+    longitude: String  
+  }
 }
 ```
 
-index: tourname-index, doc_type: tour.
+index: tourloc-index, doc_type: tour.
 
 ```bash
 {
   id: String,
-  name: String (index),
+  name: String,
   createdBy: String,
   category: String,
   time: String,
   distance: String,
-  stops: String
+  stops: String,
+  location: String (index)
 }
 ```
 
@@ -55,7 +62,11 @@ index: tourcategory-index, doc_type: tour.
   category: String (index),
   time: String,
   distance: String,
-  stops: String
+  stops: String,
+  location: {
+    latitude: String,
+    longitude: String  
+  }  
 }
 ```
 
