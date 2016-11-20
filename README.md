@@ -2,6 +2,10 @@
 Cloud Project
 
 
+Architecture
+=========
+![Alt text](https://github.com/Vignesh6v/CityTrek/blob/master/Architecture.png "Screen-shot")
+
 
 Project Proposal
 =========
