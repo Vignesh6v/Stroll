@@ -58,3 +58,7 @@ def historydetail(request, user_id):
 @api_view(['GET'])
 def historylist(request):
     pass
+
+@api_view(['POST'])
+def upload(request,stop_id):
+    pass

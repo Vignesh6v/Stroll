@@ -19,8 +19,13 @@ history_urls = [
     url(r'^$', views.historylist, name='history-list')
 ]
 
+upload_urls = [
+    url(r'^(?P<stop_id>.*)/$', views.upload ,name='picture-upload'),
+]
+
 urlpatterns = [
     url(r'^auth/', include(auth_urls)),
     url(r'^tours/', include(tours_urls)),
     url(r'^history/', include(history_urls)),
+    url(r'^upload/', include(upload_urls)),
 ]
