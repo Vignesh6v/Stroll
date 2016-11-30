@@ -5,7 +5,7 @@ from rest_framework.response import Response
 
 import services as appservice
 from . import mapping
-from serializers import UserSerializer
+from serializers import UserSerializer, TourSerializezr
 
 # User Sign Up
 @api_view(['POST'])
@@ -34,15 +34,27 @@ def userLogin(request):
 # List all available users
 @api_view(['GET'])
 def userList(request):
-    if request.method != 'GET':
-        return Response(status=status.HTTP_400_BAD_REQUEST)
-    else:
-        result = appservice.listofusers()
-        serializer = UserSerializer(result, many=True)
-        return Response(serializer.data)
+    result = appservice.listofusers()
+    serializer = UserSerializer(result, many=True)
+    return Response(serializer.data)
 
 
 @api_view(['GET'])
 def tourlist(request):
-    # need to start
+    result = appservice.listofTours()
+    serializer = TourSerializezr(result, many=True)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+def tourdetail(request, tour_id):
+    pass
+
+
+@api_view(['GET'])
+def historydetail(request, user_id):
+    pass
+
+
+@api_view(['GET'])
+def historylist(request):
     pass
