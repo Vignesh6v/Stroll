@@ -10,7 +10,8 @@ auth_urls = [
 ]
 
 tours_urls = [
-    url(r'^(?P<tour_id>.*)/$', views.tourdetail ,name='tour-detail'),
+    url(r'^create/$', views.createTour ,name='create-tour'),
+    url(r'^(?P<tour_id>[\d\-_]+)/$', views.tourdetail ,name='tour-detail'),
     url(r'^$', views.tourlist, name='tour-list')
 ]
 

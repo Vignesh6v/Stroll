@@ -17,3 +17,23 @@ def listofTours():
             longitude = hit['_source']['startLocation']['longitude']
             result_list.append(dict(id=id,name=name, createdBy=createdBy, category=category, time=time,distance=distance,stops=stops,latitude=latitude,longitude=longitude))
     return result_list
+
+def specificTour(tourid):
+    result = []
+    # query to join tour and stops
+
+    result.append(dict(id=tourid))
+    return result
+
+def tourTaken(tourid, userid):
+    # create a entry in history table with the userid and tourid
+    result = True
+
+    return result
+
+
+def createtour(tour,stops):
+    # insert tour and stop records
+    result = True
+
+    return result

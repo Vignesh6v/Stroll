@@ -1,0 +1,13 @@
+{
+"tour" : {
+  "name": "dummy",
+  "category": "kids",
+  "createdBy": "userid"
+  },
+
+"stops": [
+    {"stop_latitude": 40.6913846, "stop_longitude": -73.9896936, "name": "name1", "description": "desc1","sequence":1},
+    {"stop_latitude": 40.6914541, "stop_longitude": -73.9897761,"name": "name2", "description": "desc2","sequence":2},
+    {"stop_latitude": 40.6914541, "stop_longitude": -73.9897761,"name": "name3", "description": "desc3","sequence":3}
+  ]
+}
