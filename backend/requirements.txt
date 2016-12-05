@@ -1,0 +1,5 @@
+Django==1.10.3
+elasticsearch==2.1.0
+requests==2.9.1
+requests_aws4auth==0.9
+djangorestframework==3.5.3
