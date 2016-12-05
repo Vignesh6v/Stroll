@@ -1,8 +1,27 @@
 from api import mapping
 
 
+
+
 def searchuser(id):
     body = {"query": {"match_phrase": {"email":id}}}
+    result = mapping.elasticSearch('user-index',body)
+    result = result['hits']
+    if result['total'] >= 1:
+        return True
+    return False
+
+
+
+
+def logincheck(id,password):
+    body = {"query": {
+            "bool": {
+                "must": { "match_phrase": { "email": id }},
+                "must": { "match_phrase": { "password":  password }}
+                }
+            }
+        }
     result = mapping.elasticSearch('user-index',body)
     result = result['hits']
     if result['total'] >= 1:

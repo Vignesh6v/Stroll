@@ -25,11 +25,16 @@ def userSignup(request):
 @api_view(['POST'])
 def userLogin(request):
     # need to modify - have to check with password and email
-    userexist = appservice.searchuser(request.data['email'])
-    if userexist:
-         return Response('Logged In',status=status.HTTP_200_OK)
-    else:
-        return Response('Need to Sign Up', status=status.HTTP_401_UNAUTHORIZED)
+    try:
+        if not appservice.searchuser(request.data['email']):
+            return Response('Need to Sign Up', status=status.HTTP_401_UNAUTHORIZED)
+        authuser = appservice.logincheck(request.data['email'],request.data['password'])
+        if authuser:
+             return Response('Logged In',status=status.HTTP_200_OK)
+        else:
+            return Response('Password Error', status=status.HTTP_401_UNAUTHORIZED)
+    except Exception as e:
+        return Response(e, status=status.HTTP_400_BAD_REQUEST)
 
 # List all available users
 @api_view(['GET'])

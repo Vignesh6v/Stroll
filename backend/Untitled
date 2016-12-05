@@ -11,3 +11,9 @@
     {"stop_latitude": 40.6914541, "stop_longitude": -73.9897761,"name": "name3", "description": "desc3","sequence":3}
   ]
 }
+
+
+{
+"email": "ns123@nyu.edu",
+"password": "pasword123"
+}
