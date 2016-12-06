@@ -10,8 +10,7 @@ auth_urls = [
 ]
 
 tours_urls = [
-    url(r'^create/$', views.createTour ,name='create-tour'),
-    url(r'^(?P<tour_id>[\d\-_]+)/$', views.tourdetail ,name='tour-detail'),
+    url(r'^(?P<tour_id>.*)/$', views.tourdetail ,name='tour-detail'),
     url(r'^$', views.tourlist, name='tour-list')
 ]
 
@@ -24,9 +23,14 @@ upload_urls = [
     url(r'^(?P<stop_id>.*)/$', views.upload ,name='picture-upload'),
 ]
 
+create_urls = [
+    url(r'^$', views.createTour ,name='create-tour'),
+]
+
 urlpatterns = [
     url(r'^auth/', include(auth_urls)),
     url(r'^tours/', include(tours_urls)),
+    url(r'^create/', include(create_urls)),
     url(r'^history/', include(history_urls)),
     url(r'^upload/', include(upload_urls)),
 ]

@@ -18,7 +18,7 @@ def finddistance(location):
         distance = ans.json()['routes'][0]['legs'][0]['distance']['text']
         time = ans.json()['routes'][0]['legs'][0]['duration']['text']
         # https://maps.googleapis.com/maps/api/directions/json?origin=40.6913846,-73.9896936&destination=40.6914541,-73.9897761&waypoints=via:40.6914541%2C-73.9897761
-
+        
         return dict(distance = distance,time=time,stops=total,latitude=location[0]['latitude'],longitude=location[0]['longitude'])
 
     except Exception as e:

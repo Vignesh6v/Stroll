@@ -1,19 +1,24 @@
 {
 "tour" : {
-  "name": "dummy",
-  "category": "kids",
-  "createdBy": "userid"
+  "name": "NYU Snacks Tour",
+  "category": "Food",
+  "createdBy": "AVjM69jgNQaAtBM78EsE"
   },
 
 "stops": [
-    {"stop_latitude": 40.6913846, "stop_longitude": -73.9896936, "name": "name1", "description": "desc1","sequence":1},
-    {"stop_latitude": 40.6914541, "stop_longitude": -73.9897761,"name": "name2", "description": "desc2","sequence":2},
-    {"stop_latitude": 40.6914541, "stop_longitude": -73.9897761,"name": "name3", "description": "desc3","sequence":3}
+    {"stop_latitude": 40.694416, "stop_longitude": -73.986607, "name": "Tandon SOE", "description": "University","sequence":1},
+    {"stop_latitude": 40.692176, "stop_longitude": -73.988598,"name": "Shake Shack", "description": "Food","sequence":2},
+    {"stop_latitude": 40.692001, "stop_longitude": -73.987080,"name": "Dunkin Donuts", "description": "Food","sequence":3}
   ]
 }
 
 
+
+
+curl -XDELETE search-citytrek-ppy6ayzyfofbnkhdg7rdc7tbim.us-east-1.es.amazonaws.com/tour-index/tour/AVjV4ZOWNQaAtBM78EsH
+
+
 {
-"email": "ns123@nyu.edu",
-"password": "pasword123"
+"email": "miranda.kerr@gmail.com",
+"password": "password123"
 }

@@ -10,16 +10,19 @@ from serializers import UserSerializer, TourSerializer, StopSerializer
 # User Sign Up
 @api_view(['POST'])
 def userSignup(request):
-    userexist = appservice.searchuser(request.data['email'])
-    if userexist:
-         return Response('Already Registered',status=status.HTTP_409_CONFLICT)
-    else:
-        serializer = UserSerializer(data=request.data)
-        if serializer.is_valid():
-            result = appservice.insertuser(serializer.data)
-            return Response('Signed Up', status=status.HTTP_201_CREATED)
+    try:
+        userexist = appservice.searchuser(request.data['email'])
+        if userexist:
+             return Response('Already Registered',status=status.HTTP_409_CONFLICT)
         else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            serializer = UserSerializer(data=request.data)
+            if serializer.is_valid():
+                result = appservice.insertuser(serializer.data)
+                return Response('Signed Up', status=status.HTTP_201_CREATED)
+            else:
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    except Exception as e:
+        return Response(str(e), status=status.HTTP_400_BAD_REQUEST)
 
 # User Login
 @api_view(['POST'])
@@ -34,57 +37,50 @@ def userLogin(request):
         else:
             return Response('Password Error', status=status.HTTP_401_UNAUTHORIZED)
     except Exception as e:
-        return Response(e, status=status.HTTP_400_BAD_REQUEST)
+        return Response(str(e) , status=status.HTTP_400_BAD_REQUEST)
 
 # List all available users
 @api_view(['GET'])
 def userList(request):
-    result = appservice.listofusers()
-    serializer = UserSerializer(result, many=True)
-    return Response(serializer.data)
-
+    try:
+        result = appservice.listofusers()
+        return Response(result)
+    except Exception as e:
+        return Response(str(e) , status=status.HTTP_400_BAD_REQUEST)
 
 # List of all Tours
 @api_view(['GET'])
 def tourlist(request):
-    result = appservice.listofTours()
-    serializer = TourSerializer(result, many=True)
-    return Response(serializer.data,status=status.HTTP_200_OK)
+    try:
+        result = appservice.listofTours()
+        return Response(result,status=status.HTTP_200_OK)
+    except Exception as e:
+        return Response(str(e) , status=status.HTTP_400_BAD_REQUEST)
 
 
 # Specific Tour details
 @api_view(['GET','POST'])
 def tourdetail(request, tour_id):
     if request.method == 'GET':
-        result = appservice.specificTour(tour_id)
-        return Response(tour_id,status=status.HTTP_200_OK)
+        try:
+            result = appservice.specificTour(tour_id)
+            return Response(result,status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response(str(e),status=status.HTTP_400_BAD_REQUEST)
+
 
     # To enter a Tour taken by the user
     # entering a record in history table
     elif request.method == 'POST':
         try:
-            userid = request.data['email']
-            if not appservice.tourTaken(tour_id,userid):
+            userid = request.data['userid']
+            if appservice.tourTaken(tour_id,userid):
                 return Response('Tour Taken', status=status.HTTP_201_CREATED)
             else:
-                return Response('Tour Taken', status=status.HTTP_400_BAD_REQUEST)
+                return Response('Tour not Taken', status=status.HTTP_409_CONFLICT)
         except Exception as e:
-            return Response(e,status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return Response(str(e),status=status.HTTP_400_BAD_REQUEST)
 
-@api_view(['GET'])
-def historydetail(request, user_id):
-    result = appservice.userhistory(user_id)
-    return Response(user_id)
-
-
-@api_view(['GET'])
-def historylist(request):
-    result = appservice.fullhistory()
-    return Response(result)
-
-@api_view(['POST'])
-def upload(request,stop_id):
-    pass
 
 @api_view(['POST'])
 def createTour(request):
@@ -109,5 +105,26 @@ def createTour(request):
         else:
             return Response('Tour Created', status=status.HTTP_201_CREATED)
     except Exception as e:
-        print 'got here'
-        return Response(e,status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        return Response(str(e),status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET'])
+def historydetail(request, user_id):
+    try:
+        result = appservice.userhistory(user_id)
+        return Response(result)
+    except Exception as e:
+        return Response(str(e),status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET'])
+def historylist(request):
+    try:
+        result = appservice.fullhistory()
+        return Response(result)
+    except Exception as e:
+        return Response(str(e),status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['POST'])
+def upload(request,stop_id):
+    pass
