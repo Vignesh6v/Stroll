@@ -37,9 +37,10 @@ def listofusers():
     hits = result['hits']['hits']
     if hits:
         for hit in hits:
+            _id = hit['_id']
             firstName = hit['_source']['firstName']
             lastName = hit['_source']['lastName']
             email = hit['_source']['email']
             password = hit['_source']['password']
-            result_list.append(dict(firstName=firstName, lastName=lastName, email=email, password=password))
+            result_list.append(dict(firstName=firstName, lastName=lastName, email=email, password=password,userid=_id))
     return result_list
