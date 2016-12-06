@@ -44,16 +44,37 @@ def userLogin(request):
 def userList(request):
     try:
         result = appservice.listofusers()
-        return Response(result)
+        serializer = UserSerializer(result, many=True)
+        return Response(serializer.data)
     except Exception as e:
         return Response(str(e) , status=status.HTTP_400_BAD_REQUEST)
+
+# Update user profile
+@api_view(['POST'])
+def userEdit(request):
+    try:
+        print request.data
+        serializer = UserSerializer(data=request.data)
+        if serializer.is_valid():
+            print "valid"
+            print serializer.data
+            return Response('Updated',status=status.HTTP_200_OK)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    except Exception as e:
+        return Response(str(e) , status=status.HTTP_400_BAD_REQUEST)
+
+
+
 
 # List of all Tours
 @api_view(['GET'])
 def tourlist(request):
     try:
         result = appservice.listofTours()
-        return Response(result,status=status.HTTP_200_OK)
+        serializer = TourSerializer(result, many=True)
+        return Response(serializer.data,status=status.HTTP_200_OK)
     except Exception as e:
         return Response(str(e) , status=status.HTTP_400_BAD_REQUEST)
 

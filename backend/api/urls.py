@@ -6,6 +6,7 @@ from api import views
 auth_urls = [
     url(r'^login/$', views.userLogin, name='user-login'),
     url(r'^signup/$', views.userSignup, name='user-singup'),
+    url(r'^edit/$', views.userEdit, name='user-edit'),
     url(r'^$', views.userList, name='user-list')
 ]
 
