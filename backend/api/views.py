@@ -2,10 +2,13 @@ from django.shortcuts import render
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from rest_framework.decorators import parser_classes
+from rest_framework.parsers import FormParser
+from rest_framework.parsers import MultiPartParser
 
 import services as appservice
 from . import mapping
-from serializers import UserSerializer, TourSerializer, StopSerializer
+from serializers import UserSerializer, TourSerializer, StopSerializer, PhotoForm
 
 # User Sign Up
 @api_view(['POST'])
@@ -13,16 +16,17 @@ def userSignup(request):
     try:
         userexist = appservice.searchuser(request.data['email'])
         if userexist:
-             return Response('Already Registered',status=status.HTTP_409_CONFLICT)
+             return Response({'status': False ,'data':None, 'message':"Already Signed-up"},status=status.HTTP_409_CONFLICT)
         else:
             serializer = UserSerializer(data=request.data)
             if serializer.is_valid():
                 result = appservice.insertuser(serializer.data)
-                return Response('Signed Up', status=status.HTTP_201_CREATED)
+                #print result
+                return Response({'status': True ,'data':result['_id'], 'message':None}, status=status.HTTP_201_CREATED)
             else:
-                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+                return Response({'status': False ,'data':None, 'message':serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
     except Exception as e:
-        return Response(str(e), status=status.HTTP_400_BAD_REQUEST)
+        return Response({'status': False ,'data':None, 'message':str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
 # User Login
 @api_view(['POST'])
@@ -30,14 +34,15 @@ def userLogin(request):
     # need to modify - have to check with password and email
     try:
         if not appservice.searchuser(request.data['email']):
-            return Response('Need to Sign Up', status=status.HTTP_401_UNAUTHORIZED)
+            return Response({'status': False ,'data':None, 'message':"Need to Sign-up"}, status=status.HTTP_401_UNAUTHORIZED)
         authuser = appservice.logincheck(request.data['email'],request.data['password'])
+        print authuser
         if authuser:
-             return Response('Logged In',status=status.HTTP_200_OK)
+             return Response({'status': True ,'data':authuser, 'message': None},status=status.HTTP_200_OK)
         else:
-            return Response('Password Error', status=status.HTTP_401_UNAUTHORIZED)
+            return Response({'status': False ,'data':None, 'message':"password error"}, status=status.HTTP_401_UNAUTHORIZED)
     except Exception as e:
-        return Response(str(e) , status=status.HTTP_400_BAD_REQUEST)
+        return Response({'status': False,'data': None, 'message': str(e)} , status=status.HTTP_400_BAD_REQUEST)
 
 # List all available users
 @api_view(['GET'])
@@ -128,6 +133,21 @@ def createTour(request):
     except Exception as e:
         return Response(str(e),status=status.HTTP_400_BAD_REQUEST)
 
+@api_view(['POST'])
+def enterComment(request,stop_id):
+    try:
+        result = appservice.entercomment(stop_id,request.data)
+        return Response('comment entered', status=status.HTTP_201_CREATED)
+    except Exception as e:
+        return Response(str(e),status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET'])
+def stopDetails(request,stop_id):
+    try:
+        result = appservice.stopdeatils(stop_id)
+        return Response(result,status=status.HTTP_200_OK)
+    except Exception as e:
+        return Response(str(e),status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])
 def historydetail(request, user_id):
@@ -146,6 +166,15 @@ def historylist(request):
     except Exception as e:
         return Response(str(e),status=status.HTTP_400_BAD_REQUEST)
 
+
 @api_view(['POST'])
-def upload(request,stop_id):
-    pass
+@parser_classes((FormParser,MultiPartParser,))
+def upload(request,stop_id,format=None):
+    print request.POST
+    print request.FILES
+    form = PhotoForm(request.POST, request.FILES)
+    print form
+    if form.is_valid():
+        print "good"
+    else:
+        return Response("Not allowed",status=status.HTTP_400_BAD_REQUEST)

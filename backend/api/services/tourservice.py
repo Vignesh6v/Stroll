@@ -22,6 +22,7 @@ def listofTours():
 def specificTour(tourid):
     stopresult = []
     tourresult = dict()
+    comments = []
     body = {"query": {"match_phrase": {"_id":tourid}}}
     result = mapping.elasticSearch('tour-index',body)
     hits = result['hits']['hits']
@@ -51,7 +52,18 @@ def specificTour(tourid):
             stop_longitude = hit['_source']['stop_longitude']
             stopresult.append(dict(stopid=_id,name=name,sequence=sequence,description=description,stop_latitude=stop_latitude,stop_longitude=stop_longitude))
 
-    result = dict(tour=tourresult,stops=stopresult)
+    body = {"query": {"match_phrase": {"stopId":tourid}}}
+    result = mapping.elasticSearch('comment-index',body)
+    hits = result['hits']['hits']
+    if hits:
+        for hit in hits:
+            _id = hit['_id']
+            comment = hit['_source']['comments']
+            userName = getUserName(hit['_source']['userId'])
+            postedOn = hit['_source']['postedOn']
+            comments.append(dict(commentid=_id,tourId=tourid,comments=comment,userName=userName,postedOn=postedOn))
+
+    result = dict(tour=tourresult,stops=stopresult,comments=comments)
     return result
 
 def tourTaken(tourid, userid):
@@ -86,3 +98,47 @@ def createtour(tour,stops):
     except Exception as e:
         result = False
     return result
+
+def entercomment(stopid,data):
+    #print stopid, data
+    try:
+        data['postedOn'] =  strftime("%Y-%m-%d %H:%M:%S", gmtime())
+        data['stopId'] = stopid
+        print data
+        result = mapping.elasticInsert('comment-index','comment',data)
+        result = True
+    except Exception as e:
+        result = False
+    return result
+
+def stopdeatils(stopid):
+    try:
+        #print stopid
+        comments = []
+        body = {"query": {"match_phrase": {"stopId":stopid}}}
+        result = mapping.elasticSearch('comment-index',body)
+        #print result
+        hits = result['hits']['hits']
+        if hits:
+            for hit in hits:
+                _id = hit['_id']
+                comment = hit['_source']['comments']
+                userName = getUserName(hit['_source']['userId'])
+                postedOn = hit['_source']['postedOn']
+                comments.append(dict(commentid=_id,stopId=stopid,comments=comment,userName=userName,postedOn=postedOn))
+    except Exception as e:
+        comments = False
+    return comments
+
+def getUserName(userid):
+    body = {"query": {"match_phrase": {"_id":userid}}}
+    result = mapping.elasticSearch('user-index',body)
+    hits = result['hits']['hits']
+    if hits:
+        for hit in hits:
+            firstName = hit['_source']['firstName']
+            lastName = hit['_source']['lastName']
+            break
+        return str(firstName)+' '+str(lastName)
+    else:
+        return None

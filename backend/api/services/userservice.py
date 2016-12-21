@@ -25,7 +25,13 @@ def logincheck(id,password):
     result = mapping.elasticSearch('user-index',body)
     result = result['hits']
     if result['total'] >= 1:
-        return True
+        #print result
+        hits = result['hits']
+        if hits:
+            for hit in hits:
+                userid = hit['_id']
+                break
+        return userid
     return False
 
 def insertuser(data):
