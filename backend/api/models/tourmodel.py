@@ -13,6 +13,7 @@ class Tour(models.Model):
     latitude = models.CharField(max_length = 25)
     longitude = models.CharField(max_length = 25)
 
+
 class Stops(models.Model):
     stopid = models.CharField(max_length = 100, blank=True)
     sequence = models.PositiveIntegerField()
@@ -20,3 +21,8 @@ class Stops(models.Model):
     stop_latitude = models.CharField(max_length = 25)
     stop_longitude = models.CharField(max_length = 25)
     description = models.CharField(max_length = 100)
+
+
+class Upload(models.Model):
+    name = models.CharField(max_length=30)
+    photo = models.ImageField(upload_to="cloud-stroll-images/", null=True, blank=True)
