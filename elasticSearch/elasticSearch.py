@@ -8,9 +8,10 @@ tour={}
 stops={}
 history={}
 photo={}
+comment={}
 
 def createUserIndex():
-	user["id"] = "0000001" 
+	user["id"] = "0000001"
 	user["email"]= "rdk.ashwin@yahoo.com"
 	user["firstName"]= "Radhakrishnan"
 	user["lastName"]= "Moni"
@@ -63,7 +64,24 @@ def createPhotoIndex():
 	res = es.index(index="photo-index", doc_type='photo', id=photo["id"], body=final)
 	print(res['created'])
 
+def createCommentIndex():
+	comment["userId"] = "AVjM69jgNQaAtBM78EsE"
+	comment["stopId"] = "AVjWBw5zNQaAtBM78EsX"
+	comment["comments"] = "Shake shack is an absolute beauty! Loved the Hamburger"
+	comment["postedOn"] = str(datetime.datetime.now())
+	final = json.dumps(comment)
+	res = es.index(index="comment-index", doc_type='comment', id=comment["stopId"], body=final)
+	print(res['created'])
 
+def createPhotoIndex():
+	photo["name"] = "NYC"
+	photo["location"] = "http://s3-us-west-2.amazonaws.com/cloud-stroll-images/Media/DSC01414.jpg"
+	photo["userId"] = "AVjM69jgNQaAtBM78EsE"
+	photo["stopId"] = "AVjWBw5zNQaAtBM78EsX"
+	photo["postedOn"] = str(datetime.datetime.now())
+	final = json.dumps(photo)
+	res = es.index(index="photo-index", doc_type='photo', body=final)
+	print(res['created'])
 
 if __name__ == '__main__':
 	host = ''
@@ -79,5 +97,7 @@ if __name__ == '__main__':
 	#createUserIndex();
 	#createTourIndex();
 	#createStopsIndex();
-	createHistoryIndex();
+	#createHistoryIndex();
+	#createPhotoIndex();
+	#createCommentIndex();
 	createPhotoIndex();
