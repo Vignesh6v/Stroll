@@ -61,7 +61,7 @@ def specificTour(tourid):
             comment = hit['_source']['comments']
             userName = getUserName(hit['_source']['userId'])
             postedOn = hit['_source']['postedOn']
-            comments.append(dict(commentid=_id,tourId=tourid,comments=comment,userName=userName,postedOn=postedOn))
+            comments.append(dict(commentid=_id,id=tourid,comments=comment,userName=userName,postedOn=postedOn))
 
     result = dict(tour=tourresult,stops=stopresult,comments=comments)
     return result
@@ -125,7 +125,7 @@ def stopdeatils(stopid):
                 comment = hit['_source']['comments']
                 userName = getUserName(hit['_source']['userId'])
                 postedOn = hit['_source']['postedOn']
-                comments.append(dict(commentid=_id,stopId=stopid,comments=comment,userName=userName,postedOn=postedOn))
+                comments.append(dict(commentid=_id,id=stopid,comments=comment,userName=userName,postedOn=postedOn))
     except Exception as e:
         comments = False
     return comments
@@ -140,5 +140,18 @@ def getUserName(userid):
             lastName = hit['_source']['lastName']
             break
         return str(firstName)+' '+str(lastName)
+    else:
+        return None
+
+def getStopName(stopid):
+    body = {"query": {"match_phrase": {"_id":stopid}}}
+    result = mapping.elasticSearch('stops-index',body)
+    print result
+    hits = result['hits']['hits']
+    if hits:
+        for hit in hits:
+            Name = hit['_source']['name']
+            break
+        return str(Name)
     else:
         return None

@@ -29,4 +29,4 @@ curl -XDELETE search-citytrek-ppy6ayzyfofbnkhdg7rdc7tbim.us-east-1.es.amazonaws.
 "userId" : "AVkC8642NQaAtBM78EuV"
 }
 
-curl -X POST 127.0.0.1:8000/api/upload/AVjWBw5HNQaAtBM78EsW/ -d '{"name" = "my image   ","source"="pic1.jpg"}' -H "Content-Type: application/json"
+curl -X POST 127.0.0.1:8000/api/upload/AVjWBw5HNQaAtBM78EsW/ -d '{"name": "my image","source":"pic1.jpg"}' -H "Content-Type: multipart/form-data"

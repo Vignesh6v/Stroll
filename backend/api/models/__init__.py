@@ -1,2 +1,2 @@
 from .usermodel import User
-from .tourmodel import Tour, Stops, Upload
+from .tourmodel import Tour, Stops, Pictures

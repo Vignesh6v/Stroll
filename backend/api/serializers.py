@@ -1,10 +1,13 @@
 from rest_framework import serializers
-from django.forms import ModelForm
+from django import forms
 from models import *
 
 class PhotoForm(serializers.ModelSerializer):
+
+    photo = serializers.ImageField(max_length=None, use_url= True)
+
     class Meta:
-        model = Upload
+        model = Pictures
         fields = '__all__'
 
 class UserSerializer(serializers.ModelSerializer):

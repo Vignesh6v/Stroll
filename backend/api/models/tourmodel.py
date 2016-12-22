@@ -23,6 +23,6 @@ class Stops(models.Model):
     description = models.CharField(max_length = 100)
 
 
-class Upload(models.Model):
+class Pictures(models.Model):
     name = models.CharField(max_length=30)
-    photo = models.ImageField(upload_to="cloud-stroll-images/", null=True, blank=True)
+    photo = models.ImageField(upload_to='Media/')

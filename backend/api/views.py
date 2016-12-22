@@ -3,8 +3,8 @@ from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.decorators import parser_classes
-from rest_framework.parsers import FormParser
 from rest_framework.parsers import MultiPartParser
+from rest_framework.parsers import FormParser
 
 import services as appservice
 from . import mapping
@@ -50,9 +50,9 @@ def userList(request):
     try:
         result = appservice.listofusers()
         serializer = UserSerializer(result, many=True)
-        return Response(serializer.data)
+        return Response ({'status': True ,'data':serializer.data, 'message':''})
     except Exception as e:
-        return Response(str(e) , status=status.HTTP_400_BAD_REQUEST)
+        return Response({'status': False ,'data':None, 'message':str(e)} , status=status.HTTP_400_BAD_REQUEST)
 
 # Update user profile
 @api_view(['POST'])
@@ -61,14 +61,14 @@ def userEdit(request):
         print request.data
         serializer = UserSerializer(data=request.data)
         if serializer.is_valid():
-            print "valid"
-            print serializer.data
-            return Response('Updated',status=status.HTTP_200_OK)
+            #print "valid"
+            #print serializer.data
+            return Response({'status': True ,'data':None, 'message':'Updated'},status=status.HTTP_200_OK)
         else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'status': False ,'data':None, 'message':serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
     except Exception as e:
-        return Response(str(e) , status=status.HTTP_400_BAD_REQUEST)
+        return Response({'status': False ,'data':None, 'message':str(e)} , status=status.HTTP_400_BAD_REQUEST)
 
 
 
@@ -79,9 +79,9 @@ def tourlist(request):
     try:
         result = appservice.listofTours()
         serializer = TourSerializer(result, many=True)
-        return Response(serializer.data,status=status.HTTP_200_OK)
+        return Response({'status': True ,'data':serializer.data, 'message':None} ,status=status.HTTP_200_OK)
     except Exception as e:
-        return Response(str(e) , status=status.HTTP_400_BAD_REQUEST)
+        return Response({'status': False ,'data':None, 'message':str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
 
 # Specific Tour details
@@ -90,9 +90,9 @@ def tourdetail(request, tour_id):
     if request.method == 'GET':
         try:
             result = appservice.specificTour(tour_id)
-            return Response(result,status=status.HTTP_200_OK)
+            return Response({'status': True ,'data':result, 'message':None} ,status=status.HTTP_200_OK)
         except Exception as e:
-            return Response(str(e),status=status.HTTP_400_BAD_REQUEST)
+            return Response({'status': False ,'data':None, 'message':str(e)} ,status=status.HTTP_400_BAD_REQUEST)
 
 
     # To enter a Tour taken by the user
@@ -101,11 +101,11 @@ def tourdetail(request, tour_id):
         try:
             userid = request.data['userid']
             if appservice.tourTaken(tour_id,userid):
-                return Response('Tour Taken', status=status.HTTP_201_CREATED)
+                return Response({'status': True ,'data':None, 'message':'Tour taken'} , status=status.HTTP_201_CREATED)
             else:
-                return Response('Tour not Taken', status=status.HTTP_409_CONFLICT)
+                return Response({'status': False ,'data':None, 'message':'Tour Not taken'} , status=status.HTTP_409_CONFLICT)
         except Exception as e:
-            return Response(str(e),status=status.HTTP_400_BAD_REQUEST)
+            return Response({'status': False ,'data':None, 'message':str(e)} ,status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['POST'])
@@ -127,54 +127,59 @@ def createTour(request):
             return Response(stopserializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
         if not appservice.createtour(tour,stops):
-            return Response('Not Created', status=status.HTTP_400_BAD_REQUEST)
+            return Response({'status': False ,'data':None, 'message':'Not Created'} , status=status.HTTP_400_BAD_REQUEST)
         else:
-            return Response('Tour Created', status=status.HTTP_201_CREATED)
+            return Response({'status': True ,'data':None, 'message':'Created'} , status=status.HTTP_201_CREATED)
     except Exception as e:
-        return Response(str(e),status=status.HTTP_400_BAD_REQUEST)
+        return Response({'status': False ,'data':None, 'message':str(e)} ,status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['POST'])
 def enterComment(request,stop_id):
     try:
         result = appservice.entercomment(stop_id,request.data)
-        return Response('comment entered', status=status.HTTP_201_CREATED)
+        return Response({'status': True ,'data':None, 'message':'Comment Entered'} , status=status.HTTP_201_CREATED)
     except Exception as e:
-        return Response(str(e),status=status.HTTP_400_BAD_REQUEST)
+        return Response({'status': False ,'data':None, 'message':str(e)} ,status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])
 def stopDetails(request,stop_id):
     try:
-        result = appservice.stopdeatils(stop_id)
-        return Response(result,status=status.HTTP_200_OK)
+        comments = appservice.stopdeatils(stop_id)
+        photo_urls = appservice.getPhotos(stop_id)
+        photo_urls = ['https://s3-us-west-2.amazonaws.com/cloud-stroll-images/Media/Quotefancy-24796-3840x2160.jpg', 'https://s3-us-west-2.amazonaws.com/cloud-stroll-images/Media/web-street.jpeg']
+        stopname = appservice.getStopName(stop_id)
+        result = {'comments': comments, 'photo_urls': photo_urls, 'Name':stopname }
+        return Response({'status': True ,'data':result, 'message':None} ,status=status.HTTP_200_OK)
     except Exception as e:
-        return Response(str(e),status=status.HTTP_400_BAD_REQUEST)
+        return Response({'status': False ,'data':None, 'message':str(e)} ,status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])
 def historydetail(request, user_id):
     try:
         result = appservice.userhistory(user_id)
-        return Response(result)
+        return Response({'status': True ,'data':result, 'message':None})
     except Exception as e:
-        return Response(str(e),status=status.HTTP_400_BAD_REQUEST)
+        return Response({'status': False ,'data':None, 'message':str(e)},status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['GET'])
 def historylist(request):
     try:
         result = appservice.fullhistory()
-        return Response(result)
+        return Response({'status': True ,'data':result, 'message':None} )
     except Exception as e:
-        return Response(str(e),status=status.HTTP_400_BAD_REQUEST)
+        return Response({'status': False ,'data':None, 'message':str(e)} ,status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['POST'])
-@parser_classes((FormParser,MultiPartParser,))
 def upload(request,stop_id,format=None):
     print request.POST
     print request.FILES
+    print stop_id
     form = PhotoForm(request.POST, request.FILES)
-    print form
+    #print form
     if form.is_valid():
         print "good"
+        print form
     else:
-        return Response("Not allowed",status=status.HTTP_400_BAD_REQUEST)
+        return Response({'status': False ,'data':None, 'message':'Not Allowed'},status=status.HTTP_400_BAD_REQUEST)

@@ -3,3 +3,5 @@ elasticsearch==2.1.0
 requests==2.9.1
 requests_aws4auth==0.9
 djangorestframework==3.5.3
+django-storages==1.5.1
+boto==2.45.0
