@@ -1,19 +1,13 @@
 from api import mapping
+import random
 from time import gmtime, strftime
-
+from sample import photos
 def getPhotos(stopid):
     try:
         photolist = []
-        body = {"query": {"match_phrase": {"stopId":stopid}}}
-        result = mapping.elasticSearch('photo-index',body)
-        hits = result['hits']['hits']
-        if hits:
-            for hit in hits:
-                _id = hit['_id']
-                comment = hit['_source']['name']
-                userName = getUserName(hit['_source']['userId'])
-                postedOn = hit['_source']['postedOn']
-        comments.append(dict(commentid=_id,stopId=stopid,comments=comment,userName=userName,postedOn=postedOn))
+        for _ in range(5):
+            i = random.randint(0, 30)
+            photolist.append(str(photos[i]))
     except Exception as e:
         return []
     return photolist

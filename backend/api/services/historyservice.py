@@ -20,8 +20,26 @@ def userhistory(userid):
     hits = result['hits']['hits']
     if hits:
         for hit in hits:
-            _id = hit['_id']
-            takenOn = hit['_source']['takenOn']
-            tourId = hit['_source']['tourId']
-            result_list.append(dict(historyid=_id,tourId=tourId, takenOn=takenOn))
+            tour = getTour(hit['_source']['tourId'])
+            tour['historyid'] = hit['_id']
+            tour['takenOn'] = hit['_source']['takenOn']
+            result_list.append(tour)
     return result_list
+
+def getTour(tourid):
+    result_list = []
+    body = {"query": {"match_phrase": {"_id":tourid}}}
+    result = mapping.elasticSearch('tour-index',body)
+    hits = result['hits']['hits']
+    if hits:
+        for hit in hits:
+            _id = hit['_id']
+            name = hit['_source']['name']
+            createdBy = hit['_source']['createdBy']
+            category = hit['_source']['category']
+            time = hit['_source']['time']
+            distance = hit['_source']['distance']
+            stops = hit['_source']['stops']
+            latitude = hit['_source']['latitude']
+            longitude = hit['_source']['longitude']
+            return (dict(tourid=_id,name=name, createdBy=createdBy, category=category, time=time,distance=distance,stops=stops,latitude=latitude,longitude=longitude))

@@ -1,5 +1,5 @@
 from api import mapping
-from time import gmtime, strftime
+from time import localtime, strftime
 
 def listofTours():
     result_list = []
@@ -72,7 +72,7 @@ def tourTaken(tourid, userid):
     result = mapping.elasticSearch('user-index',body)
     result = result['hits']
     if result['total'] >= 1:
-        data = dict(tourId=tourid,userId=userid,takenOn= strftime("%Y-%m-%d %H:%M:%S", gmtime()) )
+        data = dict(tourId=tourid,userId=userid,takenOn= strftime("%Y-%m-%d %H:%M:%S", localtime()) )
         result = mapping.elasticInsert('history-index','history', data)
         if result['_id']:
             return True
@@ -102,7 +102,7 @@ def createtour(tour,stops):
 def entercomment(stopid,data):
     #print stopid, data
     try:
-        data['postedOn'] =  strftime("%Y-%m-%d %H:%M:%S", gmtime())
+        data['postedOn'] =  strftime("%Y-%m-%d %H:%M:%S", localtime())
         data['stopId'] = stopid
         print data
         result = mapping.elasticInsert('comment-index','comment',data)

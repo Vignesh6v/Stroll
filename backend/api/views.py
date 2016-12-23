@@ -121,10 +121,10 @@ def createTour(request):
         tour.update(extradetails)
         tourserializer = TourSerializer(data=tour)
         if not tourserializer.is_valid():
-            return Response(tourserializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'status': False ,'data':tourserializer.errors, 'message':'Not Created'}, status=status.HTTP_400_BAD_REQUEST)
         stopserializer = StopSerializer(data=stops, many=True)
         if not stopserializer.is_valid():
-            return Response(stopserializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'status': False ,'data':StopSerializer.errors, 'message':'Not Created'}, status=status.HTTP_400_BAD_REQUEST)
 
         if not appservice.createtour(tour,stops):
             return Response({'status': False ,'data':None, 'message':'Not Created'} , status=status.HTTP_400_BAD_REQUEST)
@@ -146,7 +146,7 @@ def stopDetails(request,stop_id):
     try:
         comments = appservice.stopdeatils(stop_id)
         photo_urls = appservice.getPhotos(stop_id)
-        photo_urls = ['https://s3-us-west-2.amazonaws.com/cloud-stroll-images/Media/Quotefancy-24796-3840x2160.jpg', 'https://s3-us-west-2.amazonaws.com/cloud-stroll-images/Media/web-street.jpeg']
+        #photo_urls = ['https://s3-us-west-2.amazonaws.com/cloud-stroll-images/Media/Quotefancy-24796-3840x2160.jpg', 'https://s3-us-west-2.amazonaws.com/cloud-stroll-images/Media/web-street.jpeg']
         stopname = appservice.getStopName(stop_id)
         result = {'comments': comments, 'photo_urls': photo_urls, 'Name':stopname }
         return Response({'status': True ,'data':result, 'message':None} ,status=status.HTTP_200_OK)
