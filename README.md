@@ -4,7 +4,7 @@ Cloud Project
 
 Architecture
 =========
-![Alt text](https://github.com/Vignesh6v/CityTrek/blob/master/Architecture.png "Screen-shot")
+![Alt text](https://github.com/Vignesh6v/CityTrek/blob/master/Architecture.jpg "Screen-shot")
 
 
 Project Proposal
