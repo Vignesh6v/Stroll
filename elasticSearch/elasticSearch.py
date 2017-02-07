@@ -20,15 +20,16 @@ def createUserIndex():
 	print(res['created'])
 
 def createTourIndex():
-	tour["id"] = "t0000001"
-	tour["name"] = "coffee"
-	tour["createdBy"] = "Radhakrishnan"
-	tour["category"] = "food"
-	tour["time"] = "40"
-	tour["distance"] = "8"
-	tour["stops"] = "4"
+	tour["name"] = "Bayridge Popular"
+	tour["longitude"]="-74.0273595"
+	tour["latitude"]="40.62435699999999"
+	tour["createdBy"] = "AVnpGYguWWfugoJOvH0X"
+	tour["category"] = ["food"]
+	tour["time"] = "8 mins"
+	tour["distance"] = "0.8 mi"
+	tour["stops"] = 4
 	final = json.dumps(tour)
-	res = es.index(index="tour-index", doc_type='tour', id=tour["id"], body=final)
+	res = es.index(index="tour-index", doc_type='tour', id="AVnpGYguWWfugoJOvH0X", body=final)
 	print(res['created'])
 
 def createStopsIndex():
@@ -62,12 +63,16 @@ def createPhotoIndex():
 	final = json.dumps(photo)
 	res = es.index(index="photo-index", doc_type='photo', id=photo["id"], body=final)
 	print(res['created'])
-
+	
+	
+def createCommentIndex():	
+	print(es.indices.create(index='comment-index'))
 
 
 if __name__ == '__main__':
-	host = ''
-	awsauth = AWS4Auth('', '', 'us-east-1', 'es')
+
+	host = 'Add the AWS Elastic Search Host URL'
+	awsauth = AWS4Auth('Enter your ACCESS_TOKEN', 'ENter your ACCESS_TOKEN_SECRET', 'Enter the REGION', 'es')
 
 	es = Elasticsearch(
 			hosts=[{'host': host, 'port': 443}],
@@ -76,8 +81,9 @@ if __name__ == '__main__':
 			verify_certs=True,
 			connection_class=RequestsHttpConnection
 	)
-	#createUserIndex();
-	#createTourIndex();
-	#createStopsIndex();
+	createUserIndex();
+	createTourIndex();
+	createStopsIndex();
 	createHistoryIndex();
 	createPhotoIndex();
+	createCommentIndex();
