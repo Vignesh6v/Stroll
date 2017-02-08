@@ -7,7 +7,7 @@ Tourists who visit cities would like to visit the most popular destinations in a
 
 ## Architecture
 
-![Alt text](https://github.com/Vignesh6v/CityTrek/blob/master/Architecture.jpg "Screen-shot")
+![Alt text](https://github.com/gs2671/Stroll/blob/master/Architecture.jpg "Screen-shot")
 
 ## Specifications
 
@@ -20,6 +20,8 @@ Tourists who visit cities would like to visit the most popular destinations in a
  * Kafka
  * EC2 Worker
 
+## Demo Video
+[Click](https://goo.gl/5vYBuV) to view the demo video 
 
 ## Project Report
 [Click](https://docs.google.com/a/nyu.edu/document/d/1AvwRhdVH6njQbratEM1vb1lCjLr_ydzxZivXgxgwH0c/edit?usp=sharing) to view the Detailed Project Report
